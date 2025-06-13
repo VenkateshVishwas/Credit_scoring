@@ -1,0 +1,62 @@
+[
+  {
+    "role": "user",
+    "content": "what is Melissa Nolan credit score?",
+    "timestamp": 1749825710.7007258,
+    "processed": true
+  },
+  {
+    "role": "assistant",
+    "content": "Agent failed to respond.",
+    "timestamp": 1749825710.949021,
+    "processed": true
+  },
+  {
+    "role": "user",
+    "content": "what is Melissa Nolan credit score?",
+    "timestamp": 1749826021.9403963,
+    "processed": true
+  },
+  {
+    "role": "assistant",
+    "content": "Agent failed to respond.",
+    "timestamp": 1749826022.5627975,
+    "processed": true
+  },
+  {
+    "role": "user",
+    "content": "what is Melissa Nolan credit score?",
+    "timestamp": 1749826143.4674842,
+    "processed": true
+  },
+  {
+    "role": "assistant",
+    "content": "[Agent error: timed out]",
+    "timestamp": 1749826148.7033744,
+    "processed": true
+  },
+  {
+    "role": "user",
+    "content": "what is Melissa Nolan credit score?",
+    "timestamp": 1749826374.4699235,
+    "processed": true
+  },
+  {
+    "role": "assistant",
+    "content": "[Agent error: timed out]",
+    "timestamp": 1749826379.8655002,
+    "processed": true
+  },
+  {
+    "role": "user",
+    "content": "what is Melissa Nolan credit score?",
+    "timestamp": 1749827963.9669452,
+    "processed": true
+  },
+  {
+    "role": "assistant",
+    "content": "[Agent error: timed out]",
+    "timestamp": 1749827969.3441792,
+    "processed": true
+  }
+]
