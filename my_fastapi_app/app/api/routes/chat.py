@@ -10,7 +10,7 @@ chat_log_path = Path("docs/chat_log.json")
 chat_log_path.parent.mkdir(parents=True, exist_ok=True)
 
 class ChatMessage(BaseModel):
-    text: str
+    query: str
 
 def load_chat_log():
     if chat_log_path.exists():
@@ -21,12 +21,12 @@ def save_chat_log(chat_data):
     chat_log_path.write_text(json.dumps(chat_data, indent=2), encoding="utf-8")
 
 @router.post("/chat-with-agent")
-def chat_with_agent(msg: ChatMessage):
+async def chat_with_agent(msg: ChatMessage):
     chat_data = load_chat_log()
 
     new_user_msg = {
         "role": "user",
-        "content": msg.text,
+        "content": msg.query,
         "timestamp": time.time(),
         "processed": False
     }
@@ -41,14 +41,20 @@ def chat_with_agent(msg: ChatMessage):
     last_msg["processed"] = True
 
     try:
-        with httpx.Client() as client:
-            response = client.post("http://127.0.0.1:8000/process", json={"query": last_msg["content"]})
+        async with httpx.AsyncClient() as client:
+            print("Sending query:", msg.query)
+            response = await client.post("http://127.0.0.1:8000/process", json={"query": msg.query}, timeout=60)
+            print("Raw response:", response.text)
             response.raise_for_status()
-            agent_reply = response.json().get("response", "Agent failed to respond.")
+            agent_reply = response.json().get("result", "Agent returned no result.")
+    except httpx.HTTPStatusError as http_err:
+        print("HTTP Error:", http_err.response.status_code, http_err.response.text)
+        agent_reply = f"[Agent HTTP error: {http_err.response.status_code} - {http_err.response.text}]"
     except Exception as e:
-        agent_reply = f"[Agent error: {str(e)}]"
+        print("General Error:", repr(e))
+        agent_reply = f"[Agent error: {repr(e)}]"
 
-    # 4. Append assistant reply
+
     chat_data.append({
         "role": "assistant",
         "content": agent_reply,
@@ -56,11 +62,12 @@ def chat_with_agent(msg: ChatMessage):
         "processed": True
     })
 
-    # 5. Save updated chat log
     save_chat_log(chat_data)
     print(agent_reply)
 
-    return {"response":agent_reply}
+    return {"response": agent_reply}
+
+
 
 
 
